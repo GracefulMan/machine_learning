@@ -12,7 +12,7 @@ from skimage import io
 num_conv = 7
 batch_size = 100
 intermediate_dim = 128
-epochs = 25
+epochs = 1
 pic_size = x_train.shape[1]
 latent_dim = pic_size * pic_size
 epsilon_std = 1.0
@@ -66,5 +66,5 @@ vae.fit(x_train,
         batch_size=batch_size,
         validation_data=(x_test, None))
 vae.save('myvae.h5')
-res = vae.predict(x_test)
+res = vae.predict(x_test,batch_size=batch_size)
 np.save('test1.npy',res)
