@@ -10,7 +10,7 @@ from keras.datasets import mnist
 from skimage import io
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 num_conv = 7
-batch_size = 128
+batch_size = 96
 latent_dim = 2
 intermediate_dim = 128
 epochs = 50
