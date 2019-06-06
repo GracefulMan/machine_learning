@@ -10,7 +10,7 @@ from keras.datasets import mnist
 from skimage import io
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 num_conv = 7
-batch_size = 96
+batch_size = 100
 latent_dim = 2
 intermediate_dim = 128
 epochs = 50
@@ -21,12 +21,11 @@ x_train = np.reshape(x_train, [-1, pic_size, pic_size])
 x_test = np.reshape(x_test, [-1, pic_size, pic_size])
 x_train = x_train.astype('float32') / 255
 x_test = x_test.astype('float32') / 255
-print(x_train.shape)
+print(x_train.shape,x_test.shape)
 x = Input(batch_shape=(batch_size,pic_size, pic_size,))
 conv_1 = Reshape((pic_size,pic_size,1))(x)
 conv_1 = Conv2D(1, kernel_size=num_conv,padding='same', activation='relu')(conv_1)
 conv_2 = Conv2D(64, kernel_size=num_conv,padding='same', strides=2, activation='relu')(conv_1)
-print(x.shape)
 conv_3 = Conv2D(64, kernel_size=num_conv,padding='same', activation='relu')(conv_2)
 flatten = Flatten()(conv_3)
 hidden = Dense(intermediate_dim, activation='relu')(flatten)
