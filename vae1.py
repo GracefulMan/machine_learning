@@ -110,9 +110,9 @@ print(x_train.shape)
 input_shape = (image_size, image_size, dim_)
 batch_size = 128
 kernel_size = 16
-filters = 16
+filters = 32
 latent_dim = 10
-epochs = 50
+epochs = 20
 
 # VAE model = encoder + decoder
 # build encoder model
