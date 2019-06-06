@@ -2,7 +2,7 @@ import numpy as np
 from scipy.stats import norm
 
 from keras.layers import Input, Dense, Lambda, Flatten, Reshape
-from keras.layers import Conv2D, UpSampling2D,Conv2DTranspose
+from keras.layers import Conv2D, UpSampling2D,Conv2DTranspose,add,BatchNormalization,MaxPooling2D
 from keras.models import Model
 from keras import backend as K
 from keras.losses import mse, binary_crossentropy
@@ -13,22 +13,30 @@ batch_size = 100
 intermediate_dim = 512
 epochs = 25
 pic_size = x_train.shape[1]
-latent_dim = pic_size * pic_size
 epsilon_std = 1.0
 dim_ = 3
+latent_dim = pic_size * pic_size*dim_
 x_train = np.reshape(x_train, [-1, pic_size, pic_size, dim_])
 x_test = np.reshape(x_test, [-1, pic_size, pic_size, dim_])
 x_train = x_train.astype('float32') / 255
 x_test = x_test.astype('float32') / 255
-#np.save('x_test.npy',x_test)
+np.save('x_test2.npy',x_test)
 print(x_train.shape,x_test.shape)
 x = Input(batch_shape=(batch_size,pic_size, pic_size,dim_))
+print(x.shape)
 conv_1 = Reshape((pic_size,pic_size,dim_))(x)
 conv_1 = Conv2D(1, kernel_size=num_conv,padding='same', activation='relu')(conv_1)
 conv_2 = Conv2D(64, kernel_size=num_conv,padding='same', strides=2, activation='relu')(conv_1)
-conv_3 = Conv2D(64, kernel_size=num_conv,padding='same', activation='relu')(conv_2)
+conv_3 = Conv2D(128, kernel_size=num_conv,padding='same', activation='relu')(conv_2)
+conv_2 = Conv2D(64, kernel_size=num_conv,padding='same', strides=2, activation='relu')(conv_1)
+conv_3 = Conv2D(3, kernel_size=num_conv,padding='same', activation='relu')(conv_3)
+x_ = MaxPooling2D(strides=2)(x)
+conv_3 = add([conv_3,x_])
+conv_3 =BatchNormalization()(conv_3)
+print(conv_3.shape)
 flatten = Flatten()(conv_3)
 hidden = Dense(intermediate_dim, activation='relu')(flatten)
+#hidden = add([x,hidden])
 z_mean = Dense(latent_dim)(hidden)
 z_log_var = Dense(latent_dim)(hidden)
 def sampling(args):
