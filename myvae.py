@@ -12,7 +12,7 @@ from skimage import io
 num_conv = 7
 batch_size = 100
 intermediate_dim = 128
-epochs = 1
+epochs = 25
 pic_size = x_train.shape[1]
 latent_dim = pic_size * pic_size
 epsilon_std = 1.0
