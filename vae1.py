@@ -51,7 +51,6 @@ def plot_results(models,
     encoder, decoder = models
     x_test, y_test = data
     os.makedirs(model_name, exist_ok=True)
-
     filename = os.path.join(model_name, "vae_mean.png")
     # display a 2D plot of the digit classes in the latent space
     z_mean, _, _ = encoder.predict(x_test,
@@ -94,7 +93,7 @@ def plot_results(models,
     plt.ylabel("z[1]")
     plt.imshow(figure, cmap='Greys_r')
     plt.savefig(filename)
-    plt.show()
+    #plt.show()
 
 dim_ = 1
 # MNIST dataset
@@ -214,5 +213,4 @@ if __name__ == '__main__':
             batch_size=batch_size,
             validation_data=(x_test, None))
     vae.save_weights('vae_cnn_mnist_binary.h5')
-    #plot_results(models, data, batch_size=batch_size, model_name="vae_cnn")
-    myplot(vae,x_test)
+    plot_results(models, data, batch_size=batch_size, model_name="vae_cnn")
