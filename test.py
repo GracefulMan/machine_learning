@@ -62,7 +62,7 @@ def vae_loss(x, x_decoded_mean,loss_type = 'mse'):
 vae = Model(x, x_decoded_mean)
 vae.summary()
 vae.add_loss(vae_loss(x,x_decoded_mean,loss_type='mse'))
-vae.compile(optimizer='rmsprop')
+vae.compile(optimizer='adam')
 vae.fit(x_train,
         epochs=epochs,
         batch_size=batch_size,
