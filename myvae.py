@@ -20,7 +20,7 @@ x_train = np.reshape(x_train, [-1, pic_size, pic_size, dim_])
 x_test = np.reshape(x_test, [-1, pic_size, pic_size, dim_])
 x_train = x_train.astype('float32') / 255
 x_test = x_test.astype('float32') / 255
-np.save('x_test2.npy',x_test)
+#np.save('x_test2.npy',x_test)
 print(x_train.shape,x_test.shape)
 x = Input(batch_shape=(batch_size,pic_size, pic_size,dim_))
 print(x.shape)
@@ -45,7 +45,7 @@ def sampling(args):
                               mean=0., stddev=epsilon_std)
     return(z_mean + K.exp(z_log_var/2) * epsilon)
 z = Lambda(sampling, output_shape=(latent_dim,))([z_mean, z_log_var])
-decoder_h = Dense(256, activation='relu')(z)
+decoder_h = Dense(pic_size*pic_size, activation='relu')(z)
 decoder = Dense(pic_size * pic_size*dim_, activation='relu')(decoder_h)
 print(decoder.shape)
 decoder = Reshape((pic_size, pic_size,dim_))(decoder)
@@ -54,7 +54,12 @@ de_conv_2 = Conv2DTranspose(64, kernel_size=num_conv,padding='same', activation=
 #upsamp = UpSampling2D(2)(de_conv_2)
 x_decoded_mean = Conv2DTranspose(3, kernel_size=num_conv,
                         padding='same', activation='relu')(de_conv_2)
-print(x_decoded_mean.shape)
+x_decoded_mean = BatchNormalization()(x_decoded_mean)
+print("x_decoded_mean:",x_decoded_mean.shape)
+z_ = Reshape([pic_size,pic_size,dim_])(z)
+print("z",z_.shape)
+
+x_decoded_mean = add([z_,x_decoded_mean])
 x_decoded_mean = Reshape([pic_size, pic_size,dim_] )(x_decoded_mean)
 
 def vae_loss(x, x_decoded_mean,loss_type = 'mse'):
