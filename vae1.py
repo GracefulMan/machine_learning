@@ -113,7 +113,7 @@ batch_size = 128
 kernel_size = 16
 filters = 16
 latent_dim = 10
-epochs = 1
+epochs = 50
 
 # VAE model = encoder + decoder
 # build encoder model
