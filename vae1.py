@@ -12,7 +12,7 @@ from keras import backend as K
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-
+import matplotlib
 
 # reparameterization trick
 # instead of sampling from Q(z|X), sample eps = N(0,I)
@@ -113,7 +113,7 @@ batch_size = 128
 kernel_size = 16
 filters = 16
 latent_dim = 10
-epochs = 20
+epochs = 1
 
 # VAE model = encoder + decoder
 # build encoder model
@@ -176,27 +176,20 @@ vae = Model(inputs, outputs, name='vae')
 plt.figure(figsize=(20, 4))
 def myplot(model,x_test):
     decoder_img = model.predict(x_test)
-    n = 10
-    for i in range(n):
-        # noisy data
-        ax = plt.subplot(3, n, i + 1)
-        plt.imshow(x_test[i])
-        #plt.gray()
-        ax.get_xaxis().set_visible(False)
-        ax.get_yaxis().set_visible(False)
-        # predict
-        ax = plt.subplot(3, n, i + 1 + n)
-        plt.imshow(decoder_img[i])
-        #plt.gray()
-        ax.get_yaxis().set_visible(False)
-        ax.get_xaxis().set_visible(False)
-        # original
-        ax = plt.subplot(3, n, i + 1 + 2 * n)
-        plt.imshow(x_test[i])
-        #plt.gray()
-        ax.get_yaxis().set_visible(False)
-        ax.get_xaxis().set_visible(False)
-    plt.savefig('test.png')
+    row = 10
+    column = 4
+    for i in range(1,row*column):
+        decoder_img = np.hstack([decoder_img[0],decoder_img[i]])
+    res = decoder_img[:,:row]
+    for j in range(1,column):
+        res = np.hstack([res,decoder_img[:, row*j:row*(j + 1)]])
+    matplotlib.image.imsave('simple_minist.png',res)
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
