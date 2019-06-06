@@ -26,7 +26,7 @@ x = Input(batch_shape=(batch_size,pic_size, pic_size,dim_))
 hidden = Flatten()(x)
 
 temp = pic_size * pic_size * dim_
-for i in range(pic_size / 2):
+for i in range(np.int32(pic_size / 2)):
     if temp > pic_size:
         temp /= 2
     hidden = Dense(np.int32(temp), activation='relu')(hidden)
@@ -41,7 +41,7 @@ z = Lambda(sampling, output_shape=(latent_dim,))([z_mean, z_log_var])
 decoder_h = Dense(pic_size*pic_size, activation='relu')(z)
 decoder = Dense(pic_size * pic_size*dim_, activation='relu')(decoder_h)
 temp = pic_size
-for i in range(pic_size / 2):
+for i in range(np.int32(pic_size / 2)):
     if temp < pic_size * pic_size:
         temp *= 2
     decoder = Dense(np.int32(temp), activation='relu')(decoder)
