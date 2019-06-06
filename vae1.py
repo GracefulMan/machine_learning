@@ -176,14 +176,8 @@ vae = Model(inputs, outputs, name='vae')
 plt.figure(figsize=(20, 4))
 def myplot(model,x_test):
     decoder_img = model.predict(x_test)
-    row = 10
-    column = 4
-    for i in range(1,row*column):
-        decoder_img = np.hstack([decoder_img[0],decoder_img[i]])
-    res = decoder_img[:,:row]
-    for j in range(1,column):
-        res = np.hstack([res,decoder_img[:, row*j:row*(j + 1)]])
-    matplotlib.image.imsave('simple_minist.png',res)
+    np.save('vae_minist.npy',decoder_img)
+
 
 
 
