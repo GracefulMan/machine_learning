@@ -2,7 +2,7 @@ import numpy as np
 from scipy.stats import norm
 
 from keras.layers import Input, Dense, Lambda, Flatten, Reshape
-from keras.layers import Conv2D, UpSampling2D
+from keras.layers import Conv2D, UpSampling2D,Conv2DTranspose
 from keras.models import Model
 from keras import backend as K
 from keras.losses import mse, binary_crossentropy
@@ -21,6 +21,7 @@ x_train = np.reshape(x_train, [-1, pic_size, pic_size])
 x_test = np.reshape(x_test, [-1, pic_size, pic_size])
 x_train = x_train.astype('float32') / 255
 x_test = x_test.astype('float32') / 255
+#np.save('x_test.npy',x_test)
 print(x_train.shape,x_test.shape)
 x = Input(batch_shape=(batch_size,pic_size, pic_size,))
 conv_1 = Reshape((pic_size,pic_size,1))(x)
@@ -40,10 +41,10 @@ z = Lambda(sampling, output_shape=(latent_dim,))([z_mean, z_log_var])
 decoder_h = Dense(256, activation='relu')(z)
 decoder = Dense(pic_size * pic_size, activation='relu')(decoder_h)
 decoder = Reshape((pic_size, pic_size,1))(decoder)
-de_conv_1 = Conv2D(64, kernel_size=num_conv,padding='same', activation='relu')(decoder)
-de_conv_2 = Conv2D(64, kernel_size=num_conv,padding='same', activation='relu')(de_conv_1)
+de_conv_1 = Conv2DTranspose(64, kernel_size=num_conv,padding='same', activation='relu')(decoder)
+de_conv_2 = Conv2DTranspose(64, kernel_size=num_conv,padding='same', activation='relu')(de_conv_1)
 #upsamp = UpSampling2D(2)(de_conv_2)
-x_decoded_mean = Conv2D(1, kernel_size=num_conv,
+x_decoded_mean = Conv2DTranspose(1, kernel_size=num_conv,
                         padding='same', activation='relu')(de_conv_2)
 print(x_decoded_mean.shape)
 x_decoded_mean = Reshape([pic_size, pic_size])(x_decoded_mean)
