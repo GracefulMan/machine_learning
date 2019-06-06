@@ -11,10 +11,10 @@ from skimage import io
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 num_conv = 7
 batch_size = 100
-latent_dim = 2
 intermediate_dim = 128
-epochs = 50
+epochs = 25
 pic_size = x_train.shape[1]
+latent_dim = pic_size * pic_size
 epsilon_std = 1.0
 dim_ = 1
 x_train = np.reshape(x_train, [-1, pic_size, pic_size])
@@ -59,8 +59,8 @@ def vae_loss(x, x_decoded_mean,loss_type = 'mse'):
     return K.mean(reconstruction_loss + kl_loss)
 vae = Model(x, x_decoded_mean)
 vae.summary()
-vae.add_loss(vae_loss(x,x_decoded_mean,loss_type='mse'))
-vae.compile(optimizer='adam')
+vae.add_loss(vae_loss(x,x_decoded_mean,loss_type='corss'))
+vae.compile(optimizer='rmsprop')
 vae.fit(x_train,
         epochs=epochs,
         batch_size=batch_size,
