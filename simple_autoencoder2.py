@@ -27,7 +27,7 @@ input_img = Input(shape=(x_test_nosiy.shape[1],))
 encoder = Dense(1000, activation='relu')(input_img)
 decoder = Dense(x_test_nosiy.shape[1],activation='sigmoid')(encoder)
 model = Model(inputs=input_img,outputs=decoder)
-model.compile(optimizer='adam', loss='mse')
+model.compile(optimizer='adam', loss='binary_crossentropy')
 model.summary()
 model.fit(x_train_nosiy,train_x,
           epochs=EPOCHS,
@@ -36,7 +36,8 @@ model.fit(x_train_nosiy,train_x,
           validation_data=(test_x,test_x)
           )
 decoder_img = model.predict(x_test_nosiy)
-n = 10
+np.save("ed_b_c.npy",decoder_img)
+n = 5
 plt.figure(figsize=(20, 4))
 for i in range(n):
     #noisy data
