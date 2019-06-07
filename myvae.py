@@ -30,13 +30,9 @@ conv_2 = Conv2D(64, kernel_size=num_conv,padding='same', strides=2, activation='
 conv_3 = Conv2D(128, kernel_size=num_conv,padding='same', activation='relu')(conv_2)
 conv_2 = Conv2D(64, kernel_size=num_conv,padding='same', strides=2, activation='relu')(conv_1)
 conv_3 = Conv2D(3, kernel_size=num_conv,padding='same', activation='relu')(conv_3)
-x_ = MaxPooling2D(strides=2)(x)
-conv_3 = add([conv_3,x_])
 conv_3 =BatchNormalization()(conv_3)
-print(conv_3.shape)
 flatten = Flatten()(conv_3)
 hidden = Dense(intermediate_dim, activation='relu')(flatten)
-#hidden = add([x,hidden])
 z_mean = Dense(latent_dim)(hidden)
 z_log_var = Dense(latent_dim)(hidden)
 def sampling(args):
@@ -55,11 +51,6 @@ de_conv_2 = Conv2DTranspose(64, kernel_size=num_conv,padding='same', activation=
 x_decoded_mean = Conv2DTranspose(3, kernel_size=num_conv,
                         padding='same', activation='relu')(de_conv_2)
 x_decoded_mean = BatchNormalization()(x_decoded_mean)
-print("x_decoded_mean:",x_decoded_mean.shape)
-z_ = Reshape([pic_size,pic_size,dim_])(z)
-print("z",z_.shape)
-
-x_decoded_mean = add([z_,x_decoded_mean])
 x_decoded_mean = Reshape([pic_size, pic_size,dim_] )(x_decoded_mean)
 
 def vae_loss(x, x_decoded_mean,loss_type = 'mse'):
