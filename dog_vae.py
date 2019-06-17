@@ -19,7 +19,7 @@ x_test_noisy = np.clip(x_test_noisy, 0, 1.)
 
 
 num_conv = 8
-batch_size = 100
+batch_size = 50
 intermediate_dim = 64
 epochs = 50
 pic_size = x_train.shape[1]
