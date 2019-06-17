@@ -61,7 +61,7 @@ def vae_loss(x, x_decoded_mean,loss_type = 'mse'):
         reconstruction_loss = mse(x, x_decoded_mean)
     else:
         reconstruction_loss = binary_crossentropy(x,x_decoded_mean)
-    xent_loss = K.sum(reconstruction_loss,axis=[1,2,3])
+    xent_loss = K.sum(reconstruction_loss,axis=-1)
 
     print(reconstruction_loss)
     #reconstruction_loss *= pic_size * pic_size
