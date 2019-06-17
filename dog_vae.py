@@ -12,8 +12,6 @@ def load_data():
     test_data = np.load('dog_test.npy')
     return train_data,test_data
 x_train , x_test = load_data()
-print(x_train[0])
-exit(0)
 x_train_noisy = x_train + noise_factor * np.random.normal(loc=0.0, scale=1.0, size=x_train.shape)
 x_test_noisy = x_test + noise_factor * np.random.normal(loc=0.0, scale=1.0, size=x_test.shape)
 num_conv = 8

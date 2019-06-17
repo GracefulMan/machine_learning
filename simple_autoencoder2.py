@@ -21,7 +21,8 @@ x_test_nosiy = test_x + 0.1 * np.random.normal(loc=0, scale=1, size=test_x.shape
 x_train_nosiy = np.clip(x_train_nosiy, 0., 1.)
 x_test_nosiy = np.clip(x_test_nosiy, 0, 1.)
 print(x_train_nosiy.shape, x_test_nosiy[0].shape)
-
+np.save("test_nosiy.npy",x_test_nosiy)
+exit(0)
 # construct Model
 input_img = Input(shape=(x_test_nosiy.shape[1],))
 encoder = Dense(1000, activation='relu')(input_img)
