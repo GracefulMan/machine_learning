@@ -5,7 +5,7 @@ from keras.layers import Conv2D, UpSampling2D,Conv2DTranspose,add,BatchNormaliza
 from keras.models import Model
 from keras import backend as K
 from keras.losses import mse, binary_crossentropy
-from keras.utils import plot_model
+#from keras.utils import plot_model
 noise_factor = 0.05
 def load_data():
     train_data = np.load('dog_train.npy')
@@ -62,7 +62,7 @@ def vae_loss(x, x_decoded_mean,loss_type = 'mse'):
     kl_loss = - 0.5 * K.sum(1 + z_log_var - K.square(z_mean) -K.exp(z_log_var), axis=-1)
     return K.mean(reconstruction_loss + kl_loss)
 vae = Model(x, x_decoded_mean)
-plot_model(vae, to_file='my_vae_cnn.png', show_shapes=True)
+#plot_model(vae, to_file='my_vae_cnn.png', show_shapes=True)
 vae.summary()
 vae.add_loss(vae_loss(x,x_decoded_mean,loss_type='corss'))
 vae.compile(optimizer='adam')
