@@ -20,8 +20,8 @@ x_train_noisy = np.clip(x_train_noisy, 0., 1.)
 x_test_noisy = np.clip(x_test_noisy, 0, 1.)
 
 img_dim = 128
-z_dim = 512
-epochs = 50
+z_dim = 1024
+epochs = 500
 batch_size = 100
 
 x_in = Input(shape=(img_dim, img_dim, 3))
@@ -100,6 +100,6 @@ vae.fit(x_train_noisy,
         batch_size=batch_size,
         validation_data=(x_test_noisy, None))
 
-res = vae.predict(x_test_noisy)[:100,]
-np.save("kill_you.npy",res)
+res = vae.predict(x_test_noisy)
+np.save("kill_all_of_you.npy",res)
 
