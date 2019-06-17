@@ -57,11 +57,9 @@ x_decoded_mean = UpSampling2D(2)(x_decoded_mean)
 x_decoded_mean = Conv2DTranspose(3, kernel_size=(4, 4),padding='same',activation='relu')(x_decoded_mean)
 
 def vae_loss(x, x_decoded_mean,loss_type = 'mse'):
-    if loss_type == 'mse':
-        reconstruction_loss = mse(x, x_decoded_mean)
-    else:
-        reconstruction_loss = K.binary_crossentropy(x,x_decoded_mean)
-    xent_loss = K.sum(reconstruction_loss,axis=-1)
+
+
+    xent_loss = K.sum(K.binary_crossentropy(K.flatten(x),K.flatten(x_decoded_mean)), axis=-1)
     #reconstruction_loss *= pic_size * pic_size
     kl_loss = - 0.5 * K.sum(1 + z_log_var - K.square(z_mean) -K.exp(z_log_var), axis=-1)
     return K.mean(xent_loss + kl_loss)
