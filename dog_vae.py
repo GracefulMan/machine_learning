@@ -66,6 +66,7 @@ def vae_loss(x, x_decoded_mean,loss_type = 'mse'):
     else:
         reconstruction_loss = binary_crossentropy(K.flatten(x),
                                                   K.flatten(x_decoded_mean))
+    print(reconstruction_loss)
     #reconstruction_loss *= pic_size * pic_size
     kl_loss = - 0.5 * K.sum(1 + z_log_var - K.square(z_mean) -K.exp(z_log_var), axis=-1)/(pic_size * pic_size * dim_)
     return K.mean(reconstruction_loss + kl_loss)
