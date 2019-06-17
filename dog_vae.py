@@ -19,7 +19,7 @@ x_test_noisy = np.clip(x_test_noisy, 0, 1.)
 
 
 num_conv = 8
-batch_size = 10
+batch_size = 32
 intermediate_dim = 64
 epochs = 50
 pic_size = x_train.shape[1]
@@ -79,7 +79,7 @@ vae.compile(optimizer='adam')
 vae.fit(x_train,
         epochs=epochs,
         batch_size=batch_size,
-        validation_data=(x_test, None))
+        validation_data=(x_test_noisy, None))
 vae.save('vae_dog.h5')
-res = vae.predict(x_test,batch_size=batch_size)
-np.save('test2.npy',res)
+res = vae.predict(x_test_noisy,batch_size=batch_size)
+np.save('test2.npy',res[:20,])
