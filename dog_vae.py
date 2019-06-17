@@ -34,10 +34,6 @@ conv_2 = MaxPooling2D(pool_size=(2,2))(conv_1)
 conv_3 = Conv2D(128,kernel_size=(8,8),padding='same',activation='relu')(conv_2)
 conv_3 = MaxPooling2D(pool_size=(2,2))(conv_3)
 conv_3 = Conv2D(256,kernel_size=(4,4),padding='same')(conv_3)
-#conv_3 = Conv2D(128, kernel_size=num_conv,padding='same', activation='relu')(conv_2)
-#conv_2 = Conv2D(64, kernel_size=num_conv,padding='same', strides=2, activation='relu')(conv_2)
-#conv_3 = Conv2D(3, kernel_size=num_conv,padding='same', activation='relu')(conv_2)
-#conv_3 =BatchNormalization()(conv_3)
 flatten = Flatten()(conv_3)
 hidden = Dense(intermediate_dim, activation='relu')(flatten)
 z_mean = Dense(latent_dim)(hidden)
@@ -62,19 +58,20 @@ x_decoded_mean = Conv2DTranspose(3, kernel_size=(4, 4),padding='same',activation
 
 def vae_loss(x, x_decoded_mean,loss_type = 'mse'):
     if loss_type == 'mse':
-        reconstruction_loss = mse(K.flatten(x), K.flatten(x_decoded_mean))
+        reconstruction_loss = mse(x, x_decoded_mean)
     else:
-        reconstruction_loss = binary_crossentropy(K.flatten(x),
-                                                  K.flatten(x_decoded_mean))
+        reconstruction_loss = binary_crossentropy(x,x_decoded_mean)
+    xent_loss = K.sum(reconstruction_loss,axis=[1,2,3])
+
     print(reconstruction_loss)
     #reconstruction_loss *= pic_size * pic_size
-    kl_loss = - 0.5 * K.sum(1 + z_log_var - K.square(z_mean) -K.exp(z_log_var), axis=-1)/(pic_size * pic_size * dim_)
-    return K.mean(reconstruction_loss + kl_loss)
+    kl_loss = - 0.5 * K.sum(1 + z_log_var - K.square(z_mean) -K.exp(z_log_var), axis=-1)
+    return K.mean(xent_loss + kl_loss)
 vae = Model(x, x_decoded_mean)
 #plot_model(vae, to_file='my_vae_cnn.png', show_shapes=True)
 vae.summary()
 vae.add_loss(vae_loss(x,x_decoded_mean,loss_type=''))
-vae.compile(optimizer='adam')
+vae.compile(optimizer='rmsprop')
 vae.fit(x_train,
         epochs=epochs,
         batch_size=batch_size,
