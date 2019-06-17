@@ -108,6 +108,6 @@ vae.fit(x_train_noisy,
 
 # 构建encoder，然后观察各个数字在隐空间的分布
 encoder = Model(x_in, z_mean)
-x_test_encoded = encoder.predict(x_test_noisy, batch_size=batch_size)
+x_test_encoded = vae.predict(x_test_noisy, batch_size=batch_size)
 
 np.save('gg.npy',x_test_encoded[:20])
