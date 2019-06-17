@@ -202,7 +202,6 @@ if __name__ == '__main__':
     kl_loss = K.sum(kl_loss, axis=-1)
     kl_loss *= -0.5
     vae_loss = K.mean(reconstruction_loss + kl_loss)
-    print(vae_loss)
     vae.add_loss(vae_loss)
     vae.compile(optimizer='adam')
     vae.summary()
