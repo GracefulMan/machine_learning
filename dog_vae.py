@@ -14,6 +14,10 @@ def load_data():
 x_train , x_test = load_data()
 x_train_noisy = x_train + noise_factor * np.random.normal(loc=0.0, scale=1.0, size=x_train.shape)
 x_test_noisy = x_test + noise_factor * np.random.normal(loc=0.0, scale=1.0, size=x_test.shape)
+x_train_noisy = np.clip(x_train_noisy, 0., 1.)
+x_test_noisy = np.clip(x_test_noisy, 0, 1.)
+
+
 num_conv = 8
 batch_size = 32
 intermediate_dim = 64
@@ -70,7 +74,7 @@ def vae_loss(x, x_decoded_mean,loss_type = 'mse'):
 vae = Model(x, x_decoded_mean)
 #plot_model(vae, to_file='my_vae_cnn.png', show_shapes=True)
 vae.summary()
-vae.add_loss(vae_loss(x,x_decoded_mean,loss_type='corss'))
+vae.add_loss(vae_loss(x,x_decoded_mean,loss_type='mse'))
 vae.compile(optimizer='adam')
 vae.fit(x_train,
         epochs=epochs,
