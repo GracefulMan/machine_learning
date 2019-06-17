@@ -29,7 +29,7 @@ input_shape = (image_size, image_size, 3)
 batch_size = 100
 kernel_size = 3
 filters = 16
-latent_dim = 2 # 隐变量取2维只是为了方便后面画图
+latent_dim = 256 # 隐变量取2维只是为了方便后面画图
 epochs = 30
 
 
