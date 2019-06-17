@@ -50,9 +50,7 @@ def sampling(args):
 z = Lambda(sampling, output_shape=(latent_dim,))([z_mean, z_log_var])
 decoder_h = Dense(latent_dim, activation='relu')(z)
 decoder = Dense(latent_dim, activation='relu')(decoder_h)
-print(decoder.shape)
 decoder = Reshape((16, 16,-1))(decoder)
-print(decoder.shape)
 de_conv_1 = Conv2DTranspose(8, kernel_size=(4, 4),padding='same', activation='relu')(decoder)
 de_conv_1 = UpSampling2D(2)(de_conv_1)
 de_conv_2 = Conv2DTranspose(32, kernel_size=(8, 8),padding='same', activation='relu')(de_conv_1)
@@ -68,13 +66,13 @@ def vae_loss(x, x_decoded_mean,loss_type = 'mse'):
     else:
         reconstruction_loss = binary_crossentropy(K.flatten(x),
                                                   K.flatten(x_decoded_mean))
-    reconstruction_loss *= pic_size * pic_size
+    #reconstruction_loss *= pic_size * pic_size
     kl_loss = - 0.5 * K.sum(1 + z_log_var - K.square(z_mean) -K.exp(z_log_var), axis=-1)
     return K.mean(reconstruction_loss + kl_loss)
 vae = Model(x, x_decoded_mean)
 #plot_model(vae, to_file='my_vae_cnn.png', show_shapes=True)
 vae.summary()
-vae.add_loss(vae_loss(x,x_decoded_mean,loss_type='mse'))
+vae.add_loss(vae_loss(x,x_decoded_mean,loss_type=''))
 vae.compile(optimizer='adam')
 vae.fit(x_train,
         epochs=epochs,
