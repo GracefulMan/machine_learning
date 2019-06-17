@@ -17,7 +17,7 @@ x_test_noisy = x_test + noise_factor * np.random.normal(loc=0.0, scale=1.0, size
 num_conv = 8
 batch_size = 32
 intermediate_dim = 64
-epochs = 50
+epochs = 1
 pic_size = x_train.shape[1]
 epsilon_std = 1.0
 dim_ = 3
