@@ -74,7 +74,7 @@ def vae_loss(x, x_decoded_mean,loss_type = 'mse'):
 vae = Model(x, x_decoded_mean)
 #plot_model(vae, to_file='my_vae_cnn.png', show_shapes=True)
 vae.summary()
-vae.add_loss(vae_loss(x,x_decoded_mean,loss_type=''))
+vae.add_loss(vae_loss(x,x_decoded_mean,loss_type='mse'))
 vae.compile(optimizer='adam')
 vae.fit(x_train,
         epochs=epochs,
