@@ -15,7 +15,7 @@ x_train , x_test = load_data()
 x_train_noisy = x_train + noise_factor * np.random.normal(loc=0.0, scale=1.0, size=x_train.shape)
 x_test_noisy = x_test + noise_factor * np.random.normal(loc=0.0, scale=1.0, size=x_test.shape)
 num_conv = 8
-batch_size = 100
+batch_size = 32
 intermediate_dim = 512
 epochs = 50
 pic_size = x_train.shape[1]
