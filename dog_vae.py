@@ -10,10 +10,8 @@ noise_factor = 0.05
 def load_data():
     train_data = np.load('dog_train.npy')
     test_data = np.load('dog_test.npy')
-    return train_data,test_data
+    return train_data[:1000,:,:],test_data[:1000,:,:]
 x_train , x_test = load_data()
-x_train = x_train[:1760,:,:]
-x_test = x_train[:1247,:,:]
 x_train_noisy = x_train + noise_factor * np.random.normal(loc=0.0, scale=1.0, size=x_train.shape)
 x_test_noisy = x_test + noise_factor * np.random.normal(loc=0.0, scale=1.0, size=x_test.shape)
 x_train_noisy = np.clip(x_train_noisy, 0., 1.)
@@ -21,7 +19,7 @@ x_test_noisy = np.clip(x_test_noisy, 0, 1.)
 
 
 num_conv = 8
-batch_size = 32
+batch_size = 10
 intermediate_dim = 64
 epochs = 1
 pic_size = x_train.shape[1]
