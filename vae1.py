@@ -96,23 +96,27 @@ def plot_results(models,
     #plt.show()
 
 dim_ = 1
+noise_factor = 0.1
 # MNIST dataset
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
-
 image_size = x_train.shape[1]
 x_train = np.reshape(x_train, [-1, image_size, image_size, dim_])
 x_test = np.reshape(x_test, [-1, image_size, image_size, dim_])
 x_train = x_train.astype('float32') / 255
 x_test = x_test.astype('float32') / 255
-print(x_train.shape)
 
+
+x_train_noisy = x_train + noise_factor * np.random.normal(loc=0.0, scale=1.0, size=x_train.shape)
+x_test_noisy = x_test + noise_factor * np.random.normal(loc=0.0, scale=1.0, size=x_test.shape)
+x_train_noisy = np.clip(x_train_noisy, 0., 1.)
+x_test_noisy = np.clip(x_test_noisy, 0, 1.)
 # network parameters
 input_shape = (image_size, image_size, dim_)
 batch_size = 128
 kernel_size = 16
 filters = 32
-latent_dim = 10
-epochs = 20
+latent_dim = 128
+epochs = 100
 
 # VAE model = encoder + decoder
 # build encoder model
@@ -207,9 +211,33 @@ if __name__ == '__main__':
     vae.summary()
     #plot_model(vae, to_file='vae_cnn.png', show_shapes=True)
     # train the autoencoder
-    vae.fit(x_train,
+    vae.fit(x_train_noisy,
             epochs=epochs,
             batch_size=batch_size,
-            validation_data=(x_test, None))
+            validation_data=(x_test_noisy, None))
     vae.save_weights('vae_cnn_mnist_binary.h5')
-    plot_results(models, data, batch_size=batch_size, model_name="vae_cnn")
+    decoder_img = vae.predict(x_test_noisy)
+    n = 6
+    plt.figure()
+    for i in range(n):
+        # noisy data
+        ax = plt.subplot(3, n, i + 1)
+        plt.imshow(x_test_noisy[i].reshape(image_size, image_size))
+        plt.gray()
+        ax.get_xaxis().set_visible(False)
+        ax.get_yaxis().set_visible(False)
+        # predict
+        ax = plt.subplot(3, n, i + 1 + n)
+        plt.imshow(decoder_img[i].reshape(image_size, image_size))
+        plt.gray()
+        ax.get_yaxis().set_visible(False)
+        ax.get_xaxis().set_visible(False)
+        # original
+        ax = plt.subplot(3, n, i + 1 + 2 * n)
+        plt.imshow(x_test[i].reshape(image_size, image_size, dim_))
+        plt.gray()
+        ax.get_yaxis().set_visible(False)
+        ax.get_xaxis().set_visible(False)
+    plt.savefig('mnist_myfirst_vae.png')
+
+    #plot_results(models, data, batch_size=batch_size, model_name="vae_cnn")
