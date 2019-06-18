@@ -116,7 +116,7 @@ batch_size = 128
 kernel_size = 16
 filters = 32
 latent_dim = 128
-epochs = 100
+epochs = 30
 
 # VAE model = encoder + decoder
 # build encoder model
@@ -180,15 +180,6 @@ plt.figure(figsize=(20, 4))
 def myplot(model,x_test):
     decoder_img = model.predict(x_test)
     np.save('vae_minist.npy',decoder_img)
-
-
-
-
-
-
-
-
-
 if __name__ == '__main__':
     loss_func = 2
     models = (encoder, decoder)
