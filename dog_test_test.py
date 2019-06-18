@@ -21,7 +21,7 @@ x_test_noisy = np.clip(x_test_noisy, 0, 1.)
 
 img_dim = 128
 z_dim = 1024
-epochs = 500
+epochs = 100
 batch_size = 100
 
 x_in = Input(shape=(img_dim, img_dim, 3))
