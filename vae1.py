@@ -202,11 +202,8 @@ if __name__ == '__main__':
     vae.summary()
     #plot_model(vae, to_file='vae_cnn.png', show_shapes=True)
     # train the autoencoder
-    vae.fit(x_train_noisy,
-            epochs=epochs,
-            batch_size=batch_size,
-            validation_data=(x_test_noisy, None))
-    vae.save_weights('vae_cnn_mnist_binary.h5')
+    #vae.fit(x_train_noisy,epochs=epochs,batch_size=batch_size,validation_data=(x_test_noisy, None))
+    vae.load_weights('vae_cnn_mnist_binary.h5')
     decoder_img = vae.predict(x_test_noisy)
     n = 6
     plt.figure()
@@ -225,7 +222,7 @@ if __name__ == '__main__':
         ax.get_xaxis().set_visible(False)
         # original
         ax = plt.subplot(3, n, i + 1 + 2 * n)
-        plt.imshow(x_test[i].reshape(image_size, image_size, dim_))
+        plt.imshow(x_test[i].reshape(image_size, image_size))
         plt.gray()
         ax.get_yaxis().set_visible(False)
         ax.get_xaxis().set_visible(False)

@@ -6,6 +6,7 @@ from keras import backend as K
 from keras.optimizers import Adam
 from keras.callbacks import Callback
 import matplotlib.pyplot as plt
+from keras.utils import plot_model
 
 
 noise_factor = 0.05
@@ -45,6 +46,8 @@ x = GlobalAveragePooling2D()(x)
 
 encoder = Model(x_in, x)
 encoder.summary()
+plot_model(encoder, to_file='modified_vae_encoder.png', show_shapes=True)
+
 map_size = K.int_shape(encoder.layers[-2].output)[1:-1]
 
 z_in = Input(shape=K.int_shape(x)[1:])
@@ -68,6 +71,7 @@ z = Activation('tanh')(z)
 
 decoder = Model(z_in, z)
 decoder.summary()
+plot_model(decoder, to_file='modified_vae_decoder.png', show_shapes=True)
 
 class ScaleShift(Layer):
     def __init__(self, **kwargs):
