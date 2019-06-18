@@ -4,7 +4,7 @@ from keras.datasets import mnist,cifar10
 from keras.models import Model
 import matplotlib.pyplot as plt
 #parameters
-EPOCHS = 50
+EPOCHS = 20
 BS = 128
 # load data
 (train_x, _) ,(test_x, _) = cifar10.load_data()
@@ -36,7 +36,7 @@ model.fit(x_train_nosiy,train_x,
 decoder_img = model.predict(x_test_nosiy)
 np.save("res_encoder_decoder_cifir10.npy",decoder_img)
 n = 6
-plt.figure(figsize=(20, 4))
+plt.figure()
 for i in range(n):
     #noisy data
     ax = plt.subplot(3,n,i+1)
@@ -56,5 +56,4 @@ for i in range(n):
     plt.gray()
     ax.get_yaxis().set_visible(False)
     ax.get_xaxis().set_visible(False)
-
 plt.savefig('cifi_10_simple_e_d.png')
