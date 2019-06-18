@@ -4,7 +4,7 @@ from keras.datasets import mnist,cifar10
 from keras.models import Model
 import matplotlib.pyplot as plt
 #parameters
-EPOCHS = 40
+EPOCHS = 50
 BS = 128
 # load data
 (train_x, _) ,(test_x, _) = cifar10.load_data()
@@ -20,9 +20,6 @@ x_train_nosiy = train_x + 0.1 * np.random.normal(loc=0., scale=1., size=train_x.
 x_test_nosiy = test_x + 0.1 * np.random.normal(loc=0, scale=1, size=test_x.shape)
 x_train_nosiy = np.clip(x_train_nosiy, 0., 1.)
 x_test_nosiy = np.clip(x_test_nosiy, 0, 1.)
-print(x_train_nosiy.shape, x_test_nosiy[0].shape)
-np.save("test_nosiy.npy",x_test_nosiy)
-exit(0)
 # construct Model
 input_img = Input(shape=(x_test_nosiy.shape[1],))
 encoder = Dense(1000, activation='relu')(input_img)
@@ -37,8 +34,8 @@ model.fit(x_train_nosiy,train_x,
           validation_data=(test_x,test_x)
           )
 decoder_img = model.predict(x_test_nosiy)
-np.save("ed_b_c.npy",decoder_img)
-n = 5
+np.save("res_encoder_decoder_cifir10.npy",decoder_img)
+n = 6
 plt.figure(figsize=(20, 4))
 for i in range(n):
     #noisy data
@@ -60,4 +57,4 @@ for i in range(n):
     ax.get_yaxis().set_visible(False)
     ax.get_xaxis().set_visible(False)
 
-plt.savefig('cifi_ed.png')
+plt.savefig('cifi_10_simple_e_d.png')
