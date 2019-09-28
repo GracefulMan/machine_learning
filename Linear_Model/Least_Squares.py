@@ -17,7 +17,7 @@ if __name__ == '__main__':
     sample_num = 20
     features = 1
 
-    train_x, train_y = generate_dataset(sample_num, features)
+    train_x, train_y, _ = generate_dataset(sample_num, features)
     beta = least_squre(train_x, train_y)
     print("estimated parameter:", beta)
     visualization(train_x, train_y, beta)
