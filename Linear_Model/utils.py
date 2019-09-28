@@ -1,6 +1,20 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
+
+# generate dataset.
+def generate_dataset(sample_num, features):
+    '''
+    :param sample_num: indicates the number of dataset's rows.
+    :param features:  indicates the number of features
+    :return: generated train_data
+    '''
+    real_beta = np.random.randint(1, 10, (features, 1)) #generate parameter :beta
+    train_x = np.random.random((sample_num, features)) * 10
+    train_y = np.dot(train_x, real_beta) + np.random.normal(0, 0.5, (sample_num,1))
+    return train_x, train_y
+
+
 # the following function is used to visualize the 1 variable or 2 variables regression.
 def visualization(train_x, train_y,beta):
     if np.shape(beta)[0] > 2:
