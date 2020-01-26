@@ -21,7 +21,7 @@ def huber_gradient(train_x, beta, train_y, deta=100):
 
 
 def logistic_gradient_01_response(train_x, beta, train_y):
-    return (sigmoid(np.dot(train_x, beta)) - train_y)
+    return  np.dot( train_x.T, sigmoid(np.dot(train_x, beta)) - train_y)
 
 
 
@@ -32,7 +32,8 @@ def gradient_map(name):
     gradient_func = {
         "mse": mse_gradient,
         "mae": mae_gradient,
-        "huber": huber_gradient
+        "huber": huber_gradient,
+        "logistic0": logistic_gradient_01_response
     }
     if name not in gradient_func.keys():
         print("doesn't exist loss function: %s" % name)

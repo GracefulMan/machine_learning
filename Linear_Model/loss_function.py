@@ -24,12 +24,13 @@ def huber(y_true, y_pred, deta = 100):
 
 def logistic_for_0_1_responses(y_true, y_pred):
     # label belongs to 0 and 1
-    return -np.mean(y_true * np.log(sigmoid(y_pred)) + (1-y_true) * np.log(1 - sigmoid(y_pred)) )
+    return -np.sum(y_true * np.log(sigmoid(y_pred) + 1e-10) + (1 - y_true) * np.log(1 - sigmoid(y_pred) + 1e-10))
 
 
 def logistic_loss(y_true, y_pred):
     # label belongs to -1 and 1
     return np.sum(np.log(1 + np.exp(-y_true * y_pred)))
+
 
 def loss_map(name):
     name = name.lower()

@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 from Linear_Model.loss_function import mse
+from Linear_Model.activation_function import sigmoid,softmax
 
 
 
@@ -12,9 +13,25 @@ def generate_dataset(sample_num, features):
     :param features:  indicates the number of features
     :return: generated train_data
     '''
-    real_beta = np.random.randint(1, 10, (features, 1)) #generate parameter :beta
+    real_beta = np.random.randint(-10, 10, (features, 1)) #generate parameter :beta
     train_x = np.random.random((sample_num, features)) * 10
     train_y = np.dot(train_x, real_beta) + np.random.normal(0, 0.5, (sample_num,1))
+    return train_x, train_y, real_beta
+
+
+# generate dataset for classification
+def  generate_classification_dataset(sample_num, class_num, features, negative_sign = -1):
+    '''
+    :param sample_num: indicates the number of dataset's rows.
+    :param class_num:  indicates the  number of classes.
+    :param features:  indicates the number of features.
+    :param negative_sign: marked negative label as -1(default)
+    :return: generated train_data
+    '''
+    train_x, train_y, real_beta = generate_dataset(sample_num, features)
+    train_y = np.sign(train_y)
+    if negative_sign == 0:
+        train_y[train_y < 0] = 0
     return train_x, train_y, real_beta
 
 
@@ -51,6 +68,33 @@ def visualization(train_x, train_y, beta):
         ax.plot_surface(x1, x2, y,label = 'regression surface')
         plt.show()
 
+def visualization_for_binary_classification(train_x, train_y, beta):
+    '''
+    :param train_x: train data
+    :param train_y: train label
+    :return: None
+    '''
+    sample_nums = train_x.shape[0]
+    features = train_x.shape[1]
+    if features != 2:
+        print("can't visualize for dim=%s data" % features)
+        return None
+    fig = plt.figure()
+    ax1 = Axes3D(fig)
+    mask = (train_y >= 0.5)
+    mask = np.concatenate((mask, mask), axis=1)
+    first_class_data = train_x[mask].reshape((-1, 2))
+    second_class_data = train_x[1 - mask].reshape((-1, 2))
+    f_x1 = first_class_data[:, 0]
+    f_x2 = first_class_data[:, 1]
+    s_x1 = second_class_data[:, 0]
+    s_x2 = second_class_data[:, 1]
+    ax1.scatter(f_x1, f_x2, color='red')
+    ax1.scatter(s_x1, s_x2, color='blue')
+    line_x = np.linspace(train_x.min(), train_x.max(), 1000)
+    line_y = line_x.copy()
+    ax1.plot_surface(line_x, line_y, (line_x * beta[0] + line_y * beta[1]).reshape(-1, 1))
+    plt.show()
 
 
 def show_data_distribution(train_x, train_y, map_shape = (20,20), beta_range =(1,100), vis_loss = False, current_beta=[]):
@@ -91,7 +135,7 @@ def show_data_distribution(train_x, train_y, map_shape = (20,20), beta_range =(1
         print(tmpX, tmpY,vis_loss_list)
         ax2.plot(tmpX, tmpY, vis_loss_list, color='r', label="loss curve")
         ax2.legend()
-    ax1.plot_surface(beta1, beta2,loss,rstride=1, cstride=1, cmap='rainbow')
+    ax1.plot_surface(beta1, beta2, loss,rstride=1, cstride=1, cmap='rainbow')
     plt.show()
 
 
