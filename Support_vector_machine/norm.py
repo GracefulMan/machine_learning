@@ -3,6 +3,8 @@ this file implements the L-k norm
 '''
 
 import numpy as np
+
+
 def Norm(data, k = 2):
     '''
     :param data: the data which will be implemented norm ops.
